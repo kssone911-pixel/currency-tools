@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Currency Converter</title>
+<style>
+/* General styling */
+body{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    margin:0;
+}
+
+.container{
+    background:white;
+    padding:40px;
+    border-radius:15px;
+    box-shadow:0 10px 20px rgba(0,0,0,0.2);
+    text-align:center;
+    width:90%;
+    max-width:400px;
+}
+
+h1{
+    margin-bottom:30px;
+    color:#333;
+}
+
+input, select, button{
+    width:80%;
+    padding:12px;
+    margin:10px 0;
+    font-size:16px;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+
+button{
+    background:#007BFF;
+    color:white;
+    border:none;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#0056b3;
+}
+
+/* Result styling */
+#result{
+    margin-top:20px;
+    font-size:20px;
+    font-weight:bold;
+    color:#333;
+}
+
+/* Responsive */
+@media(max-width:450px){
+    input, select, button{
+        width:90%;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>Currency Converter</h1>
+
+<input type="number" id="amount" placeholder="Enter amount">
+
+<select id="from">
+<option value="USD">USD</option>
+<option value="EUR">EUR</option>
+<option value="RSD">RSD</option>
+<option value="GBP">GBP</option>
+<option value="CHF">CHF</option>
+<option value="JPY">JPY</option>
+<option value="CAD">CAD</option>
+<option value="AUD">AUD</option>
+</select>
+
+<select id="to">
+<option value="USD">USD</option>
+<option value="EUR">EUR</option>
+<option value="RSD">RSD</option>
+<option value="GBP">GBP</option>
+<option value="CHF">CHF</option>
+<option value="JPY">JPY</option>
+<option value="CAD">CAD</option>
+<option value="AUD">AUD</option>
+</select>
+
+<br>
+<button onclick="convert()">Convert</button>
+
+<div id="result"></div>
+</div>
+
+<script>
+async function convert(){
+    let amount = document.getElementById("amount").value;
+    let from = document.getElementById("from").value;
+    let to = document.getElementById("to").value;
+
+    if(amount==""){ 
+        alert("Please enter an amount"); 
+        return; 
+    }
+
+    try {
+        let url = `https://api.exchangerate-api.com/v4/latest/${from}`;
+        let response = await fetch(url);
+        let data = await response.json();
+        let rate = data.rates[to];
+        let result = amount * rate;
+        document.getElementById("result").innerText = `${amount} ${from} = ${result.toFixed(2)} ${to}`;
+    } catch(err){
+        document.getElementById("result").innerText = "Error fetching data. Try again later.";
+    }
+}
+</script>
+
+</body>
+</html>
